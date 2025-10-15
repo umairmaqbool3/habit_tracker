@@ -1,0 +1,50 @@
+name: "User Story"
+description: "Use this template to capture a new user story"
+title: "User Story: [Title]"
+labels: ["user story"]
+body:
+  - type: textarea
+    id: user_story
+    attributes:
+      label: "User Story"
+      description: "Fill in your user story using the format: As a [user role], I want [feature/goal], so that [reason]."
+      placeholder: |
+        **As a [user role], I want [feature/goal], so that [reason].**
+        
+        _Replace placeholders with actual content._
+  - type: input
+    id: acceptance_criteria_1
+    attributes:
+      label: "Acceptance Criteria 1"
+      description: "Enter the first acceptance criterion for this story."
+  - type: input
+    id: acceptance_criteria_2
+    attributes:
+      label: "Acceptance Criteria 2"
+      description: "Enter the second acceptance criterion for this story."
+  - type: input
+    id: acceptance_criteria_3
+    attributes:
+      label: "Acceptance Criteria 3"
+      description: "Enter the third acceptance criterion for this story."
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Priority"
+      description: "Select the priority level."
+      options:
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+  - type: input
+    id: story_points
+    attributes:
+      label: "Story Points"
+      description: "Estimated effort in points."
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Notes"
+      description: "Add any additional information or edge cases."

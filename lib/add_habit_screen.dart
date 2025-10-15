@@ -60,7 +60,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade700,
-        title: Text('Configure Habits'),
+        title: Text('Configure Habits', style: TextStyle(color: Colors.white),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

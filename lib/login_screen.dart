@@ -21,17 +21,22 @@ class _LoginScreenState extends State<LoginScreen> {
   final String defaultPassword = 'password123';
 
   void _login() async {
-    final username = _usernameController.text;
-    final password = _passwordController.text;
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    // Retrieve saved credentials from local storage
+    final savedUsername = prefs.getString('username');
+    final savedPassword = prefs.getString('password');
+    print("Saved Username: $savedUsername, Saved Password: $savedPassword");
     // Check against default credentials
     if (username == defaultUsername && password == defaultPassword) {
       await prefs.setString('name', 'Test User');
       await prefs.setString('username', 'testuser');
       await prefs.setDouble('age', 25);
       await prefs.setString('country', 'United States of America');
+      await prefs.setString('password', defaultPassword);
 
       Navigator.pushReplacement(
         context,
@@ -39,11 +44,32 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (context) => HabitTrackerScreen(username: username),
         ),
       );
-    } else {
-      //empty out shared preferences
-      await prefs.clear();
+    }
+    // ✅ Check for saved local credentials
+    else if (username.isNotEmpty && password.isNotEmpty) {
+      if (username == savedUsername && password == savedPassword) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HabitTrackerScreen(username: username),
+          ),
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "Incorrect username or password",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+    }
+    // Empty fields or invalid case
+    else {
+      // await prefs.clear();
       Fluttertoast.showToast(
-        msg: "The username or password was incorrect",
+        msg: "Please enter both username and password",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.red,
@@ -87,12 +113,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextField(
                     controller: _usernameController,
                     decoration: InputDecoration(
-                      prefixIcon:
-                          Icon(Icons.email, color: Colors.blue.shade700),
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: Colors.blue.shade700,
+                      ),
                       hintText: 'Enter Username',
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15),
+                        horizontal: 20,
+                        vertical: 15,
+                      ),
                     ),
                   ),
                 ),
@@ -110,7 +140,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: 'Enter Password',
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15),
+                        horizontal: 20,
+                        vertical: 15,
+                      ),
                     ),
                   ),
                 ),
@@ -136,7 +168,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 80, vertical: 15),
+                      horizontal: 80,
+                      vertical: 15,
+                    ),
                   ),
                   child: const Text(
                     'Log in',
@@ -148,17 +182,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'or',
-                  style: TextStyle(color: Colors.white70),
-                ),
+                const Text('or', style: TextStyle(color: Colors.white70)),
                 const SizedBox(height: 10),
                 OutlinedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => RegisterScreen()),
+                      MaterialPageRoute(builder: (context) => RegisterScreen()),
                     );
                   },
                   style: OutlinedButton.styleFrom(
@@ -167,7 +197,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 70, vertical: 15),
+                      horizontal: 70,
+                      vertical: 15,
+                    ),
                   ),
                   child: const Text(
                     'Sign up',
